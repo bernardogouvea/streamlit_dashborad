@@ -1,7 +1,7 @@
 import streamlit as st
 import requests as rq
 import pandas as pd
-import plotly.express as pl
+import plotly.express as px
 
 def formata_numero(valor, prefixo = ''):
     for unidade in ['', 'mil']:
@@ -25,7 +25,7 @@ receita_categorias = dados.groupby('Categoria do Produto')[['Preço']].sum().sor
 receita_estados = dados.drop_duplicates(subset = 'Local da compra')[['Local da compra', 'lat', 'lon']].merge(receita_estados, left_on = 'Local da compra', right_index = True).sort_values('Preço', ascending = False)
 
 ## Gráficos
-fig_mapa_receita = pl.scatter_geo(receita_estados,
+fig_mapa_receita = px.scatter_geo(receita_estados,
                                    lat = 'lat',
                                    lon = 'lon',
                                    scope = 'south america',
@@ -35,7 +35,7 @@ fig_mapa_receita = pl.scatter_geo(receita_estados,
                                    hover_data = {'lat':False,'lon':False},
                                    title = 'Receita por Estado')
 
-fig_receita_estados = pl.bar(receita_estados.head(),
+fig_receita_estados = px.bar(receita_estados.head(),
                                             x = 'Local da compra',
                                             y = 'Preço',
                                             text_auto = True,
@@ -43,7 +43,7 @@ fig_receita_estados = pl.bar(receita_estados.head(),
 
 fig_receita_estados.update_layout(yaxis_title = 'Receita')
 
-fig_receita_categorias = pl.bar(receita_categorias, text_auto = True, title = 'Receita por categoria')
+fig_receita_categorias = px.bar(receita_categorias, text_auto = True, title = 'Receita por categoria')
 
 fig_receita_categorias.update_layout(yaxis_title = 'Receita')
 
